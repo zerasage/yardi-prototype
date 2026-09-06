@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Kwari Design System — Yardi
+   Named for Kantin Kwari, Kano. Palette per PRD §12.1.
+   ========================================================================== */
+
+@theme {
+  /* Kofar Mata indigo */
+  --color-indigo-900: #101b47;
+  --color-indigo-700: #1b2a6b;
+  --color-indigo-500: #3b4c99;
+  --color-indigo-100: #e4e7f4;
+
+  /* Brass — the Advanced accent */
+  --color-brass-500: #d9a441;
+  --color-brass-700: #b8862b;
+  --color-brass-100: #f7ecd4;
+
+  /* Kano clay — the Basic accent */
+  --color-clay-500: #c4622d;
+  --color-clay-700: #9c4c21;
+  --color-clay-100: #f7e5da;
+
+  /* Cream surfaces */
+  --color-cream-50: #fbf8f2;
+  --color-cream-100: #f6f1e7;
+  --color-cream-200: #efe8da;
+
+  /* Ink */
+  --color-ink-900: #1a1713;
+  --color-ink-700: #3d372f;
+  --color-ink-500: #6b635a;
+  --color-ink-300: #9c9288;
+
+  --color-line-200: #e6dfd3;
+
+  /* Semantic */
+  --color-signal-green: #2e7d5b;
+  --color-signal-amber: #e0a100;
+  --color-signal-red: #c0392b;
+
+  /* Grade bands */
+  --color-grade-a: #2e7d5b;
+  --color-grade-b: #4e8a6e;
+  --color-grade-c: #e0a100;
+  --color-grade-d: #c0392b;
+  --color-grade-pending: #6b635a;
+
+  --font-display: var(--font-display), "Bricolage Grotesque", system-ui, sans-serif;
+  --font-sans: var(--font-sans), "Inter", system-ui, sans-serif;
+
+  --radius-card: 16px;
+  --radius-sheet: 24px;
+
+  --ease-cloth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  background: var(--color-cream-50);
+  color: var(--color-ink-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 640px) {
+  html,
+  body {
+    background: var(--color-ink-900);
+  }
+}
+
+/* Prices and any tabular figure — PRD §12.2 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Hide scrollbars on horizontal rails while keeping momentum scroll */
+.no-bar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   M4 — Weave shimmer. Diagonal warp-and-weft, not a plain sweep. PRD §12A.1
+   -------------------------------------------------------------------------- */
+
+.weave-skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-cream-200);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(27, 42, 107, 0.05) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(-45deg, rgba(27, 42, 107, 0.04) 0 2px, transparent 2px 6px);
+}
+.weave-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+  animation: weave-sweep 1.6s var(--ease-cloth) infinite;
+}
+@keyframes weave-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Indigo dye bloom — adapted from Fabrico's gradient blobs. PRD §12A.2
+   Soft radial indigo washes drifting like dye through water.
+   -------------------------------------------------------------------------- */
+
+.dye-bloom {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.08;
+  background: radial-gradient(circle, var(--color-indigo-700) 0%, transparent 70%);
+  animation: dye-drift 20s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.dye-bloom-2 {
+  animation-duration: 26s;
+  animation-delay: -8s;
+  background: radial-gradient(circle, var(--color-clay-500) 0%, transparent 70%);
+  opacity: 0.06;
+}
+@keyframes dye-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(24px, -32px, 0) scale(1.18);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Market marquee — adapted from Milano's brand band. PRD §12A.2
+   -------------------------------------------------------------------------- */
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Grade badge idle shimmer — 4s brass sweep so the eye finds it. PRD §12A.4
+   -------------------------------------------------------------------------- */
+
+.grade-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.75) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  animation: grade-sweep 4s ease-in-out infinite;
+}
+@keyframes grade-sweep {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  85%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Aso-oke woven hairline — two-tone strip-weave rule. PRD §12.4
+   -------------------------------------------------------------------------- */
+
+.woven-rule {
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-indigo-700) 0 6px,
+    var(--color-clay-500) 6px 10px,
+    transparent 10px 16px
+  );
+  opacity: 0.35;
+}
+
+/* --------------------------------------------------------------------------
+   Reels snap
+   -------------------------------------------------------------------------- */
+
+.snap-reels {
+  scroll-snap-type: y mandatory;
+}
+.snap-reel-item {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — collapses every effect above to a plain fade. PRD §12A
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
